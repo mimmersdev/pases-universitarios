@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { GoogleWalletError, GoogleWalletErrorType } from '@/types/errors';
+import { GoogleWalletError, GoogleWalletErrorType } from '../../types/errors';
 import { google, walletobjects_v1 } from 'googleapis';
 import { GoogleWallet_FrontFieldPaths, GoogleWalletIssueProps } from './google-wallet-types';
 

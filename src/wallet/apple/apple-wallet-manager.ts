@@ -1,7 +1,7 @@
 import { PKPass } from "passkit-generator";
 import { AppleWalletDevice, AppleWalletImages, AppleWalletIssueProps } from "./apple-wallet-types";
 import crypto from 'crypto';
-import { AppleWalletError, AppleWalletErrorType } from "@/types/errors";
+import { AppleWalletError, AppleWalletErrorType } from "../../types/errors";
 import apn from '@parse/node-apn';
 
 export interface AppleWalletCredentials {
