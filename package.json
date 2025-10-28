@@ -1,6 +1,6 @@
 {
   "name": "pases-universitarios",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "prepare": "npm run build",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
     "dev:watch": "nodemon --exec ts-node src/index.ts",
