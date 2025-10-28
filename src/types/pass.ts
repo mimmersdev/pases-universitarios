@@ -36,6 +36,8 @@ export type CreatePass = z.infer<typeof createPassSchema>;
 export interface Pass extends CreatePass {
     id: string;
     status: PassStatus;
+    googleWalletObjectID: string | null;
+    appleWalletSerialNumber: string | null;
     createdAt: Date;
     updatedAt: Date;
 }
