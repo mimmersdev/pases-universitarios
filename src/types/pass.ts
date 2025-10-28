@@ -11,6 +11,11 @@ export enum PassStatus {
     Inactive = 'Inactive'
 }
 
+export enum InstallationStatus {
+    Pending = 'Pending',
+    Installed = 'Installed',
+}
+
 // Base schema that can be extended by client projects
 export const createPassSchema = z.object({
     uniqueIdentifier: z.string().min(1),
@@ -38,6 +43,8 @@ export interface Pass extends CreatePass {
     status: PassStatus;
     googleWalletObjectID: string | null;
     appleWalletSerialNumber: string | null;
+    googleWalletInstallationStatus: InstallationStatus;
+    appleWalletInstallationStatus: InstallationStatus;
     createdAt: Date;
     updatedAt: Date;
 }
