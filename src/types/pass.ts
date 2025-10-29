@@ -45,6 +45,8 @@ export interface Pass extends CreatePass {
     appleWalletSerialNumber: string | null;
     googleWalletInstallationStatus: InstallationStatus;
     appleWalletInstallationStatus: InstallationStatus;
+    notificationCount: number;
+    lastNotificationAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
 }
