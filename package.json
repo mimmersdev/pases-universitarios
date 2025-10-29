@@ -1,8 +1,22 @@
 {
   "name": "pases-universitarios",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "default": "./dist/types/index.js"
+    },
+    "./wallet": {
+      "types": "./dist/wallet/index.d.ts",
+      "default": "./dist/wallet/index.js"
+    }
+  },
   "files": [
     "dist",
     "README.md"
