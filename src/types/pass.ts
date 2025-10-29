@@ -52,6 +52,28 @@ export const createPassSchema = z.object({
 
 export type CreatePass = z.infer<typeof createPassSchema>;
 
+export const createManyPassesSchema = z.object({
+    data: z.array(createPassSchema).min(1).superRefine((data, ctx) => {
+        const seen = new Map<string, number>();
+        
+        data.forEach((item, index) => {
+            const key = `${item.uniqueIdentifier}:${item.careerId}`;
+            
+            if (seen.has(key)) {
+                ctx.addIssue({
+                    code: "custom",
+                    message: `Duplicate pair found: uniqueIdentifier "${item.uniqueIdentifier}" and careerId "${item.careerId}" (at index ${index} and ${seen.get(key)})`,
+                    path: [index]
+                });
+            } else {
+                seen.set(key, index);
+            }
+        });
+    })
+})
+
+export type CreateManyPasses = z.infer<typeof createManyPassesSchema>;
+
 export interface SimplePass {
     uniqueIdentifier: string;
     careerId: string;
@@ -142,7 +164,6 @@ export const filterPassesSchema = z.object({
         comparation: z.enum(ListComparation),
     })).optional(),
     semester: valueOrListSchema.optional(),
-    semesterList: z.array(z.number().positive().int()).optional(),
     enrollmentYear: valueOrListSchema.optional(),
     paymentStatus: z.array(z.enum(PaymentStatus)).optional(),
     totalToPay: singleValueComparationSchema.optional(),
