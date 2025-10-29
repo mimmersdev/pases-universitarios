@@ -1,6 +1,4 @@
-// Re-export everything for convenience
-// Note: Importing from main entry point will include server-only code
-// For client components, use 'pases-universitarios/types' instead
+// Main entry point - CLIENT-SAFE (types only)
+// For wallet managers (server-only), import from 'pases-universitarios/wallet'
 export * from './types';
-export * from './wallet';
 
