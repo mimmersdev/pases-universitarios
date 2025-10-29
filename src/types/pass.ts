@@ -16,6 +16,15 @@ export enum InstallationStatus {
     Installed = 'Installed',
 }
 
+export enum SingularValueComparation {
+    Equals = 'equals',
+    GreaterThan = 'greaterThan',
+    LessThan = 'lessThan',
+    GreaterThanOrEqualTo = 'greaterThanOrEqualTo',
+    LessThanOrEqualTo = 'lessThanOrEqualTo',
+    NotEqualTo = 'notEqualTo',
+}
+
 // Base schema that can be extended by client projects
 export const createPassSchema = z.object({
     uniqueIdentifier: z.string().min(1),
@@ -88,3 +97,50 @@ export const updatePassDueRequestSchema = z.object({
 });
 
 export type UpdatePassDueRequest = z.infer<typeof updatePassDueRequestSchema>;
+
+export const singleValueComparationSchema = z.object({
+    singleValue: z.number(),
+    comparation: z.enum(SingularValueComparation),
+})
+
+export type SingleValueComparation = z.infer<typeof singleValueComparationSchema>;
+
+export const valueOrListSchema = z.union([
+    singleValueComparationSchema,
+    z.object({
+        list: z.array(z.number()),
+    }),
+])
+
+export type ValueOrList = z.infer<typeof valueOrListSchema>;
+
+export const singleDateComparationSchema = z.object({
+    singleDate: z.date(),
+    comparation: z.enum(SingularValueComparation),
+})
+
+export type SingleDateComparation = z.infer<typeof singleDateComparationSchema>;
+
+export const dateRangeSchema = z.object({
+    startDate: z.date(),
+    endDate: z.date(),
+})
+
+export const dateOrDateRangeSchema = z.union([
+    singleDateComparationSchema,
+    dateRangeSchema,
+])
+
+export const filterPassesSchema = z.object({
+    careerId: z.array(z.string().min(1)).optional(),
+    semester: valueOrListSchema.optional(),
+    semesterList: z.array(z.number().positive().int()).optional(),
+    enrollmentYear: valueOrListSchema.optional(),
+    paymentStatus: z.array(z.enum(PaymentStatus)).optional(),
+    totalToPay: singleValueComparationSchema.optional(),
+    endDueDate: dateOrDateRangeSchema.optional(),
+    graduated: z.boolean().optional(),
+    currentlyStudying: z.boolean().optional(),
+})
+
+export type FilterPasses = z.infer<typeof filterPassesSchema>;
