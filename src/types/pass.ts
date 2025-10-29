@@ -40,8 +40,8 @@ export const createPassSchema = z.object({
     paymentReference: z.string().min(1),
     paymentStatus: z.enum(PaymentStatus),
     totalToPay: z.number().min(0),
-    startDueDate: z.date(),
-    endDueDate: z.date(),
+    startDueDate: z.coerce.date(),
+    endDueDate: z.coerce.date(),
     // Backfields per pass
     onlinePaymentLink: z.url().nullable(),
     academicCalendarLink: z.url().nullable(),
@@ -96,8 +96,8 @@ export const updatePassDueSchema = z.object({
     uniqueIdentifier: z.string().min(1),
     careerId: z.string().min(1),
     totalToPay: z.number().min(0),
-    startDueDate: z.date(),
-    endDueDate: z.date(),
+    startDueDate: z.coerce.date(),
+    endDueDate: z.coerce.date(),
     onlinePaymentLink: z.url().nullable(),
 });
 
@@ -142,15 +142,15 @@ export const valueOrListSchema = z.union([
 export type ValueOrList = z.infer<typeof valueOrListSchema>;
 
 export const singleDateComparationSchema = z.object({
-    singleDate: z.date(),
+    singleDate: z.coerce.date(),
     comparation: z.enum(SingularValueComparation),
 })
 
 export type SingleDateComparation = z.infer<typeof singleDateComparationSchema>;
 
 export const dateRangeSchema = z.object({
-    startDate: z.date(),
-    endDate: z.date(),
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date(),
 })
 
 export const dateOrDateRangeSchema = z.union([
