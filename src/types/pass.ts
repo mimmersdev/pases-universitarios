@@ -19,8 +19,8 @@ export enum InstallationStatus {
 // Base schema that can be extended by client projects
 export const createPassSchema = z.object({
     uniqueIdentifier: z.string().min(1),
-    name: z.string().min(1),
     careerId: z.string().min(1),
+    name: z.string().min(1),
     semester: z.number().min(1).int(),
     enrollmentYear: z.number().positive().int(),
     paymentReference: z.string().min(1),
@@ -39,7 +39,8 @@ export const createPassSchema = z.object({
 export type CreatePass = z.infer<typeof createPassSchema>;
 
 export interface SimplePass {
-    id: string;
+    uniqueIdentifier: string;
+    careerId: string;
     status: PassStatus;
     googleWalletObjectID: string | null;
     appleWalletSerialNumber: string | null;
