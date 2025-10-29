@@ -38,7 +38,7 @@ export const createPassSchema = z.object({
 
 export type CreatePass = z.infer<typeof createPassSchema>;
 
-export interface Pass extends CreatePass {
+export interface SimplePass {
     id: string;
     status: PassStatus;
     googleWalletObjectID: string | null;
@@ -49,4 +49,8 @@ export interface Pass extends CreatePass {
     lastNotificationDate: Date | null;
     createdAt: Date;
     updatedAt: Date;
+}
+
+export interface Pass extends SimplePass, CreatePass {
+
 }
