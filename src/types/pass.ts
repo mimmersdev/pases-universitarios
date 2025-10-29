@@ -67,7 +67,23 @@ export const updatePassDueSchema = z.object({
 export type UpdatePassDue = z.infer<typeof updatePassDueSchema>;
 
 export const updatePassDueRequestSchema = z.object({
-    data: updatePassDueSchema,
+    data: z.array(updatePassDueSchema).min(1).superRefine((data, ctx) => {
+        const seen = new Map<string, number>();
+        
+        data.forEach((item, index) => {
+            const key = `${item.uniqueIdentifier}:${item.careerId}`;
+            
+            if (seen.has(key)) {
+                ctx.addIssue({
+                    code: "custom",
+                    message: `Duplicate pair found: uniqueIdentifier "${item.uniqueIdentifier}" and careerId "${item.careerId}" (at index ${index} and ${seen.get(key)})`,
+                    path: [index]
+                });
+            } else {
+                seen.set(key, index);
+            }
+        });
+    })
 });
 
 export type UpdatePassDueRequest = z.infer<typeof updatePassDueRequestSchema>;
