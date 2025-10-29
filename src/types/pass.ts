@@ -159,10 +159,10 @@ export const dateOrDateRangeSchema = z.union([
 ])
 
 export const filterPassesSchema = z.object({
-    careerId: z.array(z.object({
-        value: z.string().min(1),
+    careerId: z.object({
+        values: z.array(z.string().min(1)),
         comparation: z.enum(ListComparation),
-    })).optional(),
+    }).optional(),
     semester: valueOrListSchema.optional(),
     enrollmentYear: valueOrListSchema.optional(),
     paymentStatus: z.array(z.enum(PaymentStatus)).optional(),
