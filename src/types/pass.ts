@@ -25,6 +25,11 @@ export enum SingularValueComparation {
     NotEqualTo = 'notEqualTo',
 }
 
+export enum ListComparation {
+    Include = 'include',
+    Exclude = 'exclude',
+}
+
 // Base schema that can be extended by client projects
 export const createPassSchema = z.object({
     uniqueIdentifier: z.string().min(1),
@@ -132,7 +137,10 @@ export const dateOrDateRangeSchema = z.union([
 ])
 
 export const filterPassesSchema = z.object({
-    careerId: z.array(z.string().min(1)).optional(),
+    careerId: z.array(z.object({
+        value: z.string().min(1),
+        comparation: z.enum(ListComparation),
+    })).optional(),
     semester: valueOrListSchema.optional(),
     semesterList: z.array(z.number().positive().int()).optional(),
     enrollmentYear: valueOrListSchema.optional(),
