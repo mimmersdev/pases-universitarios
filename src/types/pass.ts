@@ -54,3 +54,20 @@ export interface SimplePass {
 export interface Pass extends SimplePass, CreatePass {
 
 }
+
+export const updatePassDueSchema = z.object({
+    uniqueIdentifier: z.string().min(1),
+    careerId: z.string().min(1),
+    totalToPay: z.number().min(0),
+    startDueDate: z.date(),
+    endDueDate: z.date(),
+    onlinePaymentLink: z.url().nullable(),
+});
+
+export type UpdatePassDue = z.infer<typeof updatePassDueSchema>;
+
+export const updatePassDueRequestSchema = z.object({
+    data: updatePassDueSchema,
+});
+
+export type UpdatePassDueRequest = z.infer<typeof updatePassDueRequestSchema>;
