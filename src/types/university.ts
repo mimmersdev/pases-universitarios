@@ -13,6 +13,7 @@ export const updateUniversitySchema = z.object({
 export type UpdateUniversity = z.infer<typeof updateUniversitySchema>;
 
 export interface University extends CreateUniversity {
+    id: string;
     createdAt: Date;
     updatedAt: Date;
 }
