@@ -164,6 +164,7 @@ export const createListTagOptionSchema = z.object({
 export type CreateListTagOption = z.infer<typeof createListTagOptionSchema>;
 
 export interface ListTagOption extends CreateListTagOption {
+    id: string;
     tagId: string;
     createdAt: Date;
     updatedAt: Date;
