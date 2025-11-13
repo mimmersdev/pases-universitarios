@@ -16,19 +16,7 @@ export enum InstallationStatus {
     Installed = 'Installed',
 }
 
-export enum SingularValueComparation {
-    Equals = 'equals',
-    GreaterThan = 'greaterThan',
-    LessThan = 'lessThan',
-    GreaterThanOrEqualTo = 'greaterThanOrEqualTo',
-    LessThanOrEqualTo = 'lessThanOrEqualTo',
-    NotEqualTo = 'notEqualTo',
-}
 
-export enum ListComparation {
-    Include = 'include',
-    Exclude = 'exclude',
-}
 
 // Base schema that can be extended by client projects
 export const createPassSchema = z.object({
@@ -44,6 +32,7 @@ export const createPassSchema = z.object({
     totalToPay: z.number("El total a pagar debe ser un número").min(0, "El total a pagar es requerido"),
     startDueDate: z.string().pipe(z.coerce.date("La fecha de inicio de vencimiento es requerida")),
     endDueDate: z.string().pipe(z.coerce.date("La fecha de fin de vencimiento es requerida")),
+    cashback: z.number("El cashback debe ser un número").min(0, "El cashback es requerido"),
     // Backfields per pass
     onlinePaymentLink: z.url("El enlace de pago en línea debe ser una URL válida").nullable(),
     academicCalendarLink: z.url("El enlace del calendario académico debe ser una URL válida").nullable(),
@@ -84,6 +73,7 @@ export interface SimplePass {
     appleWalletSerialNumber: string | null;
     googleWalletInstallationStatus: InstallationStatus;
     appleWalletInstallationStatus: InstallationStatus;
+    cashback: number;
     notificationCount: number;
     lastNotificationDate: Date | null;
     createdAt: Date;
@@ -126,52 +116,3 @@ export const updatePassDueRequestSchema = z.object({
 });
 
 export type UpdatePassDueRequest = z.infer<typeof updatePassDueRequestSchema>;
-
-export const singleValueComparationSchema = z.object({
-    singleValue: z.number("El valor singular debe ser un número").min(0, "El valor singular es requerido"),
-    comparation: z.enum(SingularValueComparation, "La comparación es requerida"),
-})
-
-export type SingleValueComparation = z.infer<typeof singleValueComparationSchema>;
-
-export const valueOrListSchema = z.union([
-    singleValueComparationSchema,
-    z.object({
-        list: z.array(z.number("El valor de la lista debe ser un número").min(0, "El valor de la lista es requerido")),
-    }),
-])
-
-export type ValueOrList = z.infer<typeof valueOrListSchema>;
-
-export const singleDateComparationSchema = z.object({
-    singleDate: z.string().pipe(z.coerce.date("La fecha singular debe ser una fecha válida")),
-    comparation: z.enum(SingularValueComparation, "La comparación es requerida"),
-})
-
-export type SingleDateComparation = z.infer<typeof singleDateComparationSchema>;
-
-export const dateRangeSchema = z.object({
-    startDate: z.string().pipe(z.coerce.date("La fecha de inicio debe ser una fecha válida")),
-    endDate: z.string().pipe(z.coerce.date("La fecha de fin debe ser una fecha válida")),
-})
-
-export const dateOrDateRangeSchema = z.union([
-    singleDateComparationSchema,
-    dateRangeSchema,
-])
-
-export const filterPassesSchema = z.object({
-    careerId: z.object({
-        values: z.array(z.string("El valor de la lista debe ser textual").min(1, "El valor de la lista es requerido")),
-        comparation: z.enum(ListComparation, "La comparación es requerida"),
-    }).optional(),
-    semester: valueOrListSchema.optional(),
-    enrollmentYear: valueOrListSchema.optional(),
-    paymentStatus: z.array(z.enum(PaymentStatus, "El estado de pago es requerido")).optional(),
-    totalToPay: singleValueComparationSchema.optional(),
-    endDueDate: dateOrDateRangeSchema.optional(),
-    graduated: z.boolean("El campo graduado debe ser un booleano").optional(),
-    currentlyStudying: z.boolean("El campo actualmente estudiando debe ser un booleano").optional(),
-})
-
-export type FilterPasses = z.infer<typeof filterPassesSchema>;
