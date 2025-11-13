@@ -14,6 +14,7 @@ export const updateCareerSchema = z.object({
 export type UpdateCareer = z.infer<typeof updateCareerSchema>;
 
 export interface Career extends CreateCareer {
+    universityId: string;
     createdAt: Date;
     updatedAt: Date;
 }

@@ -34,6 +34,7 @@ export const updateCitySchema = z.object({
 export type UpdateCity = z.infer<typeof updateCitySchema>;
 
 export interface City extends CreateCity {
+    universityId: string;
     createdAt: Date;
     updatedAt: Date;
 }
