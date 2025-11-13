@@ -5,3 +5,4 @@ export * from './errors';
 export * from './city';
 export * from './notifications';
 export * from './passTags';
+export * from './university';
