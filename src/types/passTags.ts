@@ -92,7 +92,11 @@ export type CreateNumericTag = z.infer<typeof createNumericTagSchema>;
 
 export interface NumericTag extends CreateNumericTag {
     tagId: string;
-    passId: string;
+    // Pass ids
+    universityId: string;
+    careerId: string;
+    uniqueIdentifier: string;
+
     createdAt: Date;
     updatedAt: Date;
 }
@@ -112,7 +116,11 @@ export type CreateDateTag = z.infer<typeof createDateTagSchema>;
 
 export interface DateTag extends CreateDateTag {
     tagId: string;
-    passId: string;
+    // Pass ids
+    universityId: string;
+    careerId: string;
+    uniqueIdentifier: string;
+
     createdAt: Date;
     updatedAt: Date;
 }
@@ -132,7 +140,11 @@ export type CreateBooleanTag = z.infer<typeof createBooleanTagSchema>;
 
 export interface BooleanTag extends CreateBooleanTag {
     tagId: string;
-    passId: string;
+    // Pass ids
+    universityId: string;
+    careerId: string;
+    uniqueIdentifier: string;
+
     createdAt: Date;
     updatedAt: Date;
 }
@@ -173,7 +185,11 @@ export type CreateListTag = z.infer<typeof createListTagSchema>;
 
 export interface ListTag extends CreateListTag {
     tagId: string;
-    passId: string;
+    // Pass ids
+    universityId: string;
+    careerId: string;
+    uniqueIdentifier: string;
+
     createdAt: Date;
     updatedAt: Date;
 }
