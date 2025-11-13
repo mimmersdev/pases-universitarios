@@ -184,7 +184,7 @@ export const createListTagSchema = z.object({
 
 export type CreateListTag = z.infer<typeof createListTagSchema>;
 
-export interface ListTag extends CreateListTag {
+export interface ListTag {
     tagId: string;
     // Pass ids
     universityId: string;
