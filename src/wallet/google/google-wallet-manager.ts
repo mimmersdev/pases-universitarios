@@ -19,8 +19,8 @@ export default class GoogleWalletManager {
     private issuerId: string;
     private credentials: GoogleWalletCredentials;
 
-    constructor(credentials: GoogleWalletCredentials) {
-        this.issuerId = credentials.client_email;
+    constructor(issuerId: string, credentials: GoogleWalletCredentials) {
+        this.issuerId = issuerId;
         this.credentials = credentials;
 
         try {
