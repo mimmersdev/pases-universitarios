@@ -13,7 +13,7 @@ export interface AppleWalletCredentials {
     signerKey: string;
 }
 
-const getAuthenticationToken = (serialNumber: string, tokenSecret: string): string => {
+export const getAppleAuthenticationToken = (serialNumber: string, tokenSecret: string): string => {
     return crypto
         .createHash('sha256')
         .update(serialNumber + tokenSecret)
@@ -33,7 +33,7 @@ export const AppleWalletManager = {
                 foregroundColor: props.foregroundColorRgb,
                 labelColor: props.labelColorRgb,
                 serialNumber: props.serialNumber,
-                authenticationToken: getAuthenticationToken(props.serialNumber, tokenSecret),
+                authenticationToken: getAppleAuthenticationToken(props.serialNumber, tokenSecret),
                 webServiceURL: webServiceURL,
                 barcodes: [
                     {
