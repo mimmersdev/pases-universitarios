@@ -54,67 +54,122 @@ export default class GoogleWalletManager {
         }
     }
 
+    /**
+     * Gets the pass object structure as JSON (for debugging/inspection)
+     */
+    public getPassObjectJson(objectId: string, classId: string, props: GoogleWalletIssueProps): string {
+        const passObject = this.buildPassObject(objectId, classId, props);
+        return JSON.stringify(passObject, null, 2);
+    }
+
+    /**
+     * Builds the pass object structure (used by both createPass and insertPassObject)
+     */
+    private buildPassObject(objectId: string, classId: string, props: GoogleWalletIssueProps): walletobjects_v1.Schema$GenericObject {
+        return {
+            classId: classId,
+            id: `${this.issuerId}.${objectId}`,
+
+            logo: {
+                sourceUri: {
+                    uri: props.logoUri
+                },
+                contentDescription: {
+                    defaultValue: {
+                        language: "es",
+                        value: "LOGO_IMAGE_DESCRIPTION"
+                    }
+                }
+            },
+            cardTitle: {
+                defaultValue: {
+                    language: "es",
+                    value: props.cardTitle
+                }
+            },
+            header: {
+                defaultValue: {
+                    language: "es",
+                    value: props.header
+                }
+            },
+            subheader: {
+                defaultValue: {
+                    language: "es",
+                    value: props.subheader
+                }
+            },
+            hexBackgroundColor: props.hexBackgroundColor,
+            textModulesData: props.textModulesData,
+            barcode: {
+                type: "QR_CODE",
+                value: props.barcode.value,
+                alternateText: props.barcode.alternativeText
+            },
+            heroImage: {
+                sourceUri: {
+                    uri: props.heroUri
+                },
+                contentDescription: {
+                    defaultValue: {
+                        language: "es",
+                        value: "HERO_IMAGE_DESCRIPTION"
+                    }
+                }
+            },
+            linksModuleData: {
+                uris: props.linksModuleData.map(link => ({
+                    uri: link.uri,
+                    description: link.description,
+                    id: link.id
+                }))
+            }
+        };
+    }
+
+    /**
+     * Inserts the pass object directly via Google Wallet API.
+     * Use this for debugging - it will return the actual error from Google if something is wrong.
+     * @returns The created pass object
+     */
+    public async insertPassObject(objectId: string, classId: string, props: GoogleWalletIssueProps): Promise<walletobjects_v1.Schema$GenericObject> {
+        try {
+            const passObject = this.buildPassObject(objectId, classId, props);
+
+            const response = await this.walletClient.genericobject.insert({
+                requestBody: passObject
+            });
+
+            return response.data!;
+        } catch (error: any) {
+            // Provide detailed error information for debugging
+            const errorMessage = error?.response?.data?.error?.message || error?.message || 'Unknown error';
+            const errorDetails = error?.response?.data?.error || error;
+            const passObjectJson = this.getPassObjectJson(objectId, classId, props);
+            
+            console.error('=== Google Wallet API Error ===');
+            console.error('Error Message:', errorMessage);
+            console.error('Error Details:', JSON.stringify(errorDetails, null, 2));
+            console.error('Pass Object (JSON):');
+            console.error(passObjectJson);
+            console.error('==============================');
+
+            throw new GoogleWalletError(GoogleWalletErrorType.CREATE_PASS_ERROR, {
+                message: errorMessage,
+                details: errorDetails,
+                passObjectJson: passObjectJson,
+                originalError: error
+            });
+        }
+    }
+
+    /**
+     * Creates a save link for the pass using JWT.
+     * For debugging, use insertPassObject first to validate the pass structure.
+     */
     public async createPass(objectId: string, classId: string, props: GoogleWalletIssueProps, origin: string): Promise<string> {
         try {
-            const passObject: walletobjects_v1.Schema$GenericObject = {
-                classId: classId,
-                id: `${this.issuerId}.${objectId}`,
-
-                logo: {
-                    sourceUri: {
-                        uri: props.logoUri
-                    },
-                    contentDescription: {
-                        defaultValue: {
-                            language: "es",
-                            value: "LOGO_IMAGE_DESCRIPTION"
-                        }
-                    }
-                },
-                cardTitle: {
-                    defaultValue: {
-                        language: "es",
-                        value: props.cardTitle
-                    }
-                },
-                header: {
-                    defaultValue: {
-                        language: "es",
-                        value: props.header
-                    }
-                },
-                subheader: {
-                    defaultValue: {
-                        language: "es",
-                        value: props.subheader
-                    }
-                },
-                hexBackgroundColor: props.hexBackgroundColor,
-                textModulesData: props.textModulesData,
-                barcode: {
-                    type: "QR_CODE",
-                    value: props.barcode.value,
-                    alternateText: props.barcode.alternativeText
-                },
-                heroImage: {
-                    sourceUri: {
-                        uri: props.heroUri
-                    },
-                    contentDescription: {
-                        defaultValue: {
-                            language: "es",
-                            value: "HERO_IMAGE_DESCRIPTION"
-                        }
-                    }
-                },
-                linksModuleData: {
-                    uris: props.linksModuleData.map(link => ({
-                        uri: link.uri,
-                        description: link.description,
-                        id: link.id
-                    }))
-                }
-            }
+            const passObject = this.buildPassObject(objectId, classId, props);
 
             const token = createSignedJWT(passObject, this.credentials.private_key, this.credentials.client_email, origin);
             const saveLink = generateSaveLink(token);
@@ -122,6 +177,22 @@ export default class GoogleWalletManager {
             return saveLink;
         } catch (error) {
             throw new GoogleWalletError(GoogleWalletErrorType.CREATE_PASS_ERROR, error);
+        }
+    }
+
+    /**
+     * Inserts the pass object via API and then creates a save link.
+     * This is useful for debugging as it validates the object structure first.
+     */
+    public async createPassWithValidation(objectId: string, classId: string, props: GoogleWalletIssueProps, origin: string): Promise<string> {
+        try {
+            // First insert the object to validate it
+            await this.insertPassObject(objectId, classId, props);
+            
+            // If successful, create the save link
+            return await this.createPass(objectId, classId, props, origin);
+        } catch (error) {
+            throw error; // Re-throw the detailed error from insertPassObject
         }
     }
 
