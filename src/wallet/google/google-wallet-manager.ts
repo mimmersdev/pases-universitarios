@@ -54,7 +54,7 @@ export default class GoogleWalletManager {
         }
     }
 
-    public async createPass(objectId: string, classId: string, props: GoogleWalletIssueProps): Promise<string> {
+    public async createPass(objectId: string, classId: string, props: GoogleWalletIssueProps, origin: string): Promise<string> {
         try {
             const passObject: walletobjects_v1.Schema$GenericObject = {
                 classId: classId,
@@ -116,7 +116,7 @@ export default class GoogleWalletManager {
                 }
             }
 
-            const token = createSignedJWT(passObject, this.credentials.private_key, this.credentials.client_email);
+            const token = createSignedJWT(passObject, this.credentials.private_key, this.credentials.client_email, origin);
             const saveLink = generateSaveLink(token);
 
             return saveLink;
@@ -249,7 +249,7 @@ export default class GoogleWalletManager {
     }
 }
 
-const createSignedJWT = (passObject: walletobjects_v1.Schema$GenericObject, privateKey: string, googleWalletClientEmail: string): string => {
+const createSignedJWT = (passObject: walletobjects_v1.Schema$GenericObject, privateKey: string, googleWalletClientEmail: string, origin: string): string => {
     const formattedPrivateKey = privateKey.replace(/\\n/g, '\n');
     const now = Math.floor(Date.now() / 1000);
 
@@ -262,7 +262,7 @@ const createSignedJWT = (passObject: walletobjects_v1.Schema$GenericObject, priv
         aud: 'google',
         typ: 'savetowallet',
         iat: now,
-        origins: [process.env.NEXT_PUBLIC_ORIGIN!],
+        origins: [origin],
         payload: payload
     };
 
