@@ -5,17 +5,45 @@ export enum PaymentStatus {
     Overdue = 'Overdue',
     Paid = 'Paid',
 }
+export const paymentStatusList = Object.values(PaymentStatus);
+export const getPaymentStatusLabel = (paymentStatus: PaymentStatus) => {
+    switch (paymentStatus) {
+        case PaymentStatus.Due:
+            return 'Pendiente';
+        case PaymentStatus.Overdue:
+            return 'En Mora';
+        case PaymentStatus.Paid:
+            return 'Pagado';
+    }
+}
 
 export enum PassStatus {
     Active = 'Active',
     Inactive = 'Inactive'
+}
+export const passStatusList = Object.values(PassStatus);
+export const getPassStatusLabel = (passStatus: PassStatus) => {
+    switch (passStatus) {
+        case PassStatus.Active:
+            return 'Activo';
+        case PassStatus.Inactive:
+            return 'Inactivo';
+    }
 }
 
 export enum InstallationStatus {
     Pending = 'Pending',
     Installed = 'Installed',
 }
-
+export const installationStatusList = Object.values(InstallationStatus);
+export const getInstallationStatusLabel = (installationStatus: InstallationStatus) => {
+    switch (installationStatus) {
+        case InstallationStatus.Pending:
+            return 'Pendiente';
+        case InstallationStatus.Installed:
+            return 'Instalado';
+    }
+}
 
 
 // Base schema that can be extended by client projects
