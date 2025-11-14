@@ -1,8 +1,8 @@
 export enum GoogleWallet_FrontFieldPaths {
-    PRIMARY_LEFT = "primaryLeft",
-    PRIMARY_RIGHT = "primaryRight",
-    SECONDARY_LEFT = "secondaryLeft",
-    SECONDARY_RIGHT = "secondaryRight",
+    PRIMARY_LEFT = "primary_left",
+    PRIMARY_RIGHT = "primary_right",
+    SECONDARY_LEFT = "secondary_left",
+    SECONDARY_RIGHT = "secondary_right",
 }
 
 export interface TextModuleData {
