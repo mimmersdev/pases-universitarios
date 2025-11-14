@@ -1,5 +1,5 @@
 // Export wallet managers - SERVER-ONLY, do not import in client components
-export { AppleWalletManager } from './apple/apple-wallet-manager';
+export { AppleWalletManager, getAppleAuthenticationToken } from './apple/apple-wallet-manager';
 export type { AppleWalletCredentials } from './apple/apple-wallet-manager';
 export type {
     AppleWalletIssueProps,
