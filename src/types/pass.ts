@@ -68,6 +68,7 @@ export type CreateManyPasses = z.infer<typeof createManyPassesSchema>;
 export interface SimplePass {
     uniqueIdentifier: string;
     careerId: string;
+    universityId: string;
     status: PassStatus;
     googleWalletObjectID: string | null;
     appleWalletSerialNumber: string | null;
