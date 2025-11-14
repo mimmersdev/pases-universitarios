@@ -58,7 +58,7 @@ export default class GoogleWalletManager {
         try {
             const passObject: walletobjects_v1.Schema$GenericObject = {
                 classId: classId,
-                id: objectId,
+                id: `${this.issuerId}.${objectId}`,
 
                 logo: {
                     sourceUri: {
@@ -93,6 +93,8 @@ export default class GoogleWalletManager {
                 textModulesData: props.textModulesData,
                 barcode: {
                     type: "QR_CODE",
+                    value: props.barcode.value,
+                    alternateText: props.barcode.alternativeText
                 },
                 heroImage: {
                     sourceUri: {
@@ -106,11 +108,15 @@ export default class GoogleWalletManager {
                     }
                 },
                 linksModuleData: {
-                    uris: props.linksModuleData
+                    uris: props.linksModuleData.map(link => ({
+                        uri: link.uri,
+                        description: link.description,
+                        id: link.id
+                    }))
                 }
             }
 
-            const token = await createSignedJWT(passObject, this.credentials.private_key, this.issuerId);
+            const token = createSignedJWT(passObject, this.credentials.private_key, this.credentials.client_email);
             const saveLink = generateSaveLink(token);
 
             return saveLink;
