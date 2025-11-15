@@ -110,7 +110,7 @@ export interface SimplePass {
 }
 
 export interface Pass extends SimplePass, CreatePass {
-
+    informationField: string;
 }
 
 export const updatePassDueSchema = z.object({
