@@ -74,10 +74,10 @@ export type CreatePass = z.infer<typeof createPassSchema>;
 export const createManyPassesSchema = z.object({
     data: z.array(createPassSchema).min(1).superRefine((data, ctx) => {
         const seen = new Map<string, number>();
-        
+
         data.forEach((item, index) => {
             const key = `${item.uniqueIdentifier}:${item.careerId}`;
-            
+
             if (seen.has(key)) {
                 ctx.addIssue({
                     code: "custom",
@@ -127,10 +127,10 @@ export type UpdatePassDue = z.infer<typeof updatePassDueSchema>;
 export const updatePassDueRequestSchema = z.object({
     data: z.array(updatePassDueSchema).min(1).superRefine((data, ctx) => {
         const seen = new Map<string, number>();
-        
+
         data.forEach((item, index) => {
             const key = `${item.uniqueIdentifier}:${item.careerId}`;
-            
+
             if (seen.has(key)) {
                 ctx.addIssue({
                     code: "custom",
@@ -145,3 +145,14 @@ export const updatePassDueRequestSchema = z.object({
 });
 
 export type UpdatePassDueRequest = z.infer<typeof updatePassDueRequestSchema>;
+
+export const sendOpenNotificationSchema = z.object({
+    ids: z.array(z.object({
+        uniqueIdentifier: z.string("El identificador único debe ser textual").min(1, "El identificador único es requerido"),
+        careerId: z.string("El código (ID) de la carrera debe ser textual").min(1, "El código (ID) de la carrera es requerido"),
+    })).min(1, "El array de IDs es requerido"),
+    header: z.string("El encabezado debe ser textual").min(1, "El encabezado es requerido"),
+    body: z.string("El cuerpo debe ser textual").min(1, "El cuerpo es requerido"),
+});
+
+export type SendOpenNotification = z.infer<typeof sendOpenNotificationSchema>;
