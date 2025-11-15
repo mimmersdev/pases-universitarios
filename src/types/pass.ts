@@ -111,7 +111,7 @@ export interface SimplePass {
 
 export interface SimplePass_Extra extends SimplePass {
     careerName: string;
-    universityName: string;
+    cityName: string;
 }
 
 export interface Pass extends SimplePass, CreatePass {
