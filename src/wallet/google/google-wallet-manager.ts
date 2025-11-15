@@ -39,7 +39,7 @@ export default class GoogleWalletManager {
     public async sendPassNotification(objectId: string, header: string, body: string): Promise<void> {
         try {
             await this.walletClient.genericobject.addmessage({
-                resourceId: objectId,
+                resourceId: `${this.issuerId}.${objectId}`,
                 requestBody: {
                     message: {
                         header: header,
