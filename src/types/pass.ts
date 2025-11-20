@@ -67,6 +67,8 @@ export const createPassSchema = z.object({
     // Not visible fields
     graduated: z.boolean("El campo graduado es requerido"),
     currentlyStudying: z.boolean("El campo actualmente estudiando es requerido"),
+    // Image
+    photoUrl: z.url("La URL de la foto debe ser una URL válida"),
 });
 
 export type CreatePass = z.infer<typeof createPassSchema>;
@@ -116,6 +118,9 @@ export interface SimplePass_Extra extends SimplePass {
 
 export interface Pass extends SimplePass, CreatePass {
     informationField: string;
+    photo1Url: string;
+    photo2Url: string;
+    photo3Url: string;
 }
 
 export const updatePassDueSchema = z.object({
