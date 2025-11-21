@@ -111,12 +111,18 @@ export interface SimplePass {
     updatedAt: Date;
 }
 
+export interface CreatePassBackend extends CreatePass {
+    photo1Url: string;
+    photo2Url: string;
+    photo3Url: string;
+}
+
 export interface SimplePass_Extra extends SimplePass {
     careerName: string;
     cityName: string;
 }
 
-export interface Pass extends SimplePass, CreatePass {
+export interface Pass extends SimplePass, Omit<CreatePass, 'photoUrl'> {
     informationField: string;
     photo1Url: string;
     photo2Url: string;
