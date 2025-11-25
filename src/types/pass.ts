@@ -77,12 +77,10 @@ export const createPassSchema = z.object({
     startDueDate: z.string().pipe(z.coerce.date("La fecha de inicio de vencimiento es requerida")),
     endDueDate: z.string().pipe(z.coerce.date("La fecha de fin de vencimiento es requerida")),
     cashback: z.number("El cashback debe ser un número").min(0, "El cashback es requerido"),
+    studentStatus: z.enum(StudentStatus, "El estado del estudiante es requerido"),
     // Backfields per pass
     onlinePaymentLink: z.url("El enlace de pago en línea debe ser una URL válida").nullable(),
     academicCalendarLink: z.url("El enlace del calendario académico debe ser una URL válida").nullable(),
-    // Not visible fields
-    graduated: z.boolean("El campo graduado es requerido"),
-    currentlyStudying: z.boolean("El campo actualmente estudiando es requerido"),
     // Image
     photoUrl: z.url("La URL de la foto debe ser una URL válida"),
 });
