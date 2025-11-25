@@ -2,7 +2,6 @@
 export * from './pass';
 export * from './career';
 export * from './errors';
-export * from './city';
 export * from './notifications';
 export * from './passTags';
 export * from './university';

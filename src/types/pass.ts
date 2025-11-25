@@ -6,7 +6,7 @@ export enum PaymentStatus {
     Paid = 'Paid',
 }
 export const paymentStatusList = Object.values(PaymentStatus);
-export const getPaymentStatusLabel = (paymentStatus: PaymentStatus) => {
+export const getPaymentStatusLabel = (paymentStatus: PaymentStatus): string => {
     switch (paymentStatus) {
         case PaymentStatus.Due:
             return 'Pendiente';
@@ -22,7 +22,7 @@ export enum PassStatus {
     Inactive = 'Inactive'
 }
 export const passStatusList = Object.values(PassStatus);
-export const getPassStatusLabel = (passStatus: PassStatus) => {
+export const getPassStatusLabel = (passStatus: PassStatus): string => {
     switch (passStatus) {
         case PassStatus.Active:
             return 'Activo';
@@ -31,12 +31,29 @@ export const getPassStatusLabel = (passStatus: PassStatus) => {
     }
 }
 
+export enum StudentStatus {
+    Active = 'Active',
+    Inactive = 'Inactive',
+    Graduated = 'Graduated',
+}
+export const studentStatusList = Object.values(StudentStatus);
+export const getStudentStatusLabel = (studentStatus: StudentStatus): string => {
+    switch (studentStatus) {
+        case StudentStatus.Active:
+            return 'Activo';
+        case StudentStatus.Inactive:
+            return 'Inactivo';
+        case StudentStatus.Graduated:
+            return 'Graduado';
+    }
+}
+
 export enum InstallationStatus {
     Pending = 'Pending',
     Installed = 'Installed',
 }
 export const installationStatusList = Object.values(InstallationStatus);
-export const getInstallationStatusLabel = (installationStatus: InstallationStatus) => {
+export const getInstallationStatusLabel = (installationStatus: InstallationStatus): string => {
     switch (installationStatus) {
         case InstallationStatus.Pending:
             return 'Pendiente';
@@ -52,7 +69,6 @@ export const createPassSchema = z.object({
     careerId: z.string("El código (ID) de la carrera debe ser textual").min(1, "El código (ID) de la carrera es requerido"),
     name: z.string("El nombre debe ser textual").min(1, "El nombre es requerido"),
     email: z.email("El correo electrónico es requerido"),
-    cityId: z.string("El código (ID) de la ciudad debe ser textual").min(1, "El Código (ID) de la ciudad es requerido"),
     semester: z.number("El semestre debe ser un número").min(1, "El semestre es requerido").int("El semestre debe ser un número entero"),
     enrollmentYear: z.number("El año de ingreso debe ser un número").positive("El año de ingreso debe ser un número positivo").int("El año de ingreso debe ser un número entero"),
     paymentReference: z.string("La referencia de pago debe ser textual").min(1, "La referencia de pago es requerida"),
@@ -119,7 +135,6 @@ export interface CreatePassBackend extends CreatePass {
 
 export interface SimplePass_Extra extends SimplePass {
     careerName: string;
-    cityName: string;
 }
 
 export interface Pass extends SimplePass, Omit<CreatePass, 'photoUrl'> {
