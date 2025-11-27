@@ -136,6 +136,7 @@ export interface SimplePass_Extra extends SimplePass {
 }
 
 export interface Pass extends SimplePass, Omit<CreatePass, 'photoUrl'> {
+    careerName: string;
     informationField: string;
     photo1Url: string;
     photo2Url: string;
