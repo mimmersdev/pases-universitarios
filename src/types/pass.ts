@@ -188,3 +188,31 @@ export const sendOpenNotificationSchema = z.object({
 });
 
 export type SendOpenNotification = z.infer<typeof sendOpenNotificationSchema>;
+
+export const updateCashbackSchema = z.object({
+    uniqueIdentifier: z.string("El identificador único debe ser textual").min(1, "El identificador único es requerido"),
+    careerId: z.string("El código (ID) de la carrera debe ser textual").min(1, "El código (ID) de la carrera es requerido"),
+    cashback: z.number("El cashback debe ser un número").min(0, "El cashback es requerido"),
+});
+
+export type UpdateCashback = z.infer<typeof updateCashbackSchema>;
+
+export const updateCashbackRequestSchema = z.object({
+    data: z.array(updateCashbackSchema).min(1).superRefine((data, ctx) => {
+        const seen = new Map<string, number>();
+
+        data.forEach((item, index) => {
+            const key = `${item.uniqueIdentifier}:${item.careerId}`;
+
+            if (seen.has(key)) {
+                ctx.addIssue({
+                    code: "custom",
+                    message: `Pareja duplicada encontrada: identificador único "${item.uniqueIdentifier}" y código (ID) de carrera "${item.careerId}" (en índice ${index} y ${seen.get(key)})`,
+                    path: [index]
+                });
+            } else {
+                seen.set(key, index);
+            }
+        });
+    })
+});
