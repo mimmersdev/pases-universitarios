@@ -178,6 +178,33 @@ export const updatePassDueRequestSchema = z.object({
 
 export type UpdatePassDueRequest = z.infer<typeof updatePassDueRequestSchema>;
 
+export const updatePassPaidSchema = z.object({
+    uniqueIdentifier: z.string("El identificador único debe ser textual").min(1, "El identificador único es requerido"),
+    careerId: z.string("El código (ID) de la carrera debe ser textual").min(1, "El código (ID) de la carrera es requerido"),
+});
+
+export type UpdatePassPaid = z.infer<typeof updatePassPaidSchema>;
+
+export const updatePassPaidRequestSchema = z.object({
+    data: z.array(updatePassPaidSchema).min(1).superRefine((data, ctx) => {
+        const seen = new Map<string, number>();
+        data.forEach((item, index) => {
+            const key = `${item.uniqueIdentifier}:${item.careerId}`;
+
+            if (seen.has(key)) {
+                ctx.addIssue({
+                    code: "custom",
+                    message: `Pareja duplicada encontrada: identificador único "${item.uniqueIdentifier}" y código (ID) de carrera "${item.careerId}" (en índice ${index} y ${seen.get(key)})`,
+                    path: [index]
+                });
+            } else {
+                seen.set(key, index);
+            }
+        });
+    })
+});
+export type UpdatePassPaidRequest = z.infer<typeof updatePassPaidRequestSchema>;
+
 export const sendOpenNotificationSchema = z.object({
     ids: z.array(z.object({
         uniqueIdentifier: z.string("El identificador único debe ser textual").min(1, "El identificador único es requerido"),
