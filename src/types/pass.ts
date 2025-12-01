@@ -129,6 +129,7 @@ export interface CreatePassBackend extends CreatePass {
     photo1Url: string;
     photo2Url: string;
     photo3Url: string;
+    photoGoogleHeroUrl: string;
 }
 
 export interface SimplePass_Extra extends SimplePass {
@@ -141,6 +142,7 @@ export interface Pass extends SimplePass, Omit<CreatePass, 'photoUrl'> {
     photo1Url: string;
     photo2Url: string;
     photo3Url: string;
+    photoGoogleHeroUrl: string;
 }
 
 export const updatePassDueSchema = z.object({
