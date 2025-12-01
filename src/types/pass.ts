@@ -216,3 +216,5 @@ export const updateCashbackRequestSchema = z.object({
         });
     })
 });
+
+export type UpdateCashbackRequest = z.infer<typeof updateCashbackRequestSchema>;
